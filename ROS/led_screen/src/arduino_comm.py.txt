@@ -1,0 +1,17 @@
+📄 Archivo: arduino_comm.py
+📌 ¿Qué es?
+Es un nodo de ROS 2 que maneja la comunicación con una pantalla LED conectada por un adaptador USB-TTL Serial.
+
+📌 ¿Para qué sirve?
+Inicializa ROS con rospy.init_node("led_screen").
+Escucha mensajes en el tópico /status del tipo Status (posiblemente estado del rover).
+Cuando recibe datos (callback), actualiza la pantalla con:
+Nivel de batería.
+Errores del sistema.
+Temperatura y corriente.
+Maneja el apagado con shutdown(), cambiando la pantalla a estado inactivo.
+
+📌 ¿Hace falta tocarlo?
+✅ Solo si:
+Cambias el formato del mensaje Status.
+Modificas cómo se comunican ROS y la pantalla LED.

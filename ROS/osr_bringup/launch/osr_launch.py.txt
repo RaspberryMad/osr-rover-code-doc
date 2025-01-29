@@ -1,0 +1,19 @@
+📄 Archivo: osr_launch.py
+📌 ¿Qué es?
+Es un archivo de lanzamiento de ROS 2, escrito en Python, que inicia los nodos principales del rover.
+
+📌 ¿Para qué sirve?
+Carga los parámetros de configuración (roboclaw_params.yaml, osr_params.yaml).
+Inicia los nodos principales del rover:
+roboclaw_wrapper → Controlador de motores.
+servo_control → Control de servos para dirección.
+rover → Nodo principal del rover.
+teleop_twist_joy → Permite controlar el rover con un joystick.
+joy_node → Maneja la entrada del joystick.
+ina260_node → Publica datos de sensores de corriente INA260.
+
+📌 ¿Hace falta tocarlo?
+✅ Solo si:
+Cambias parámetros de los motores, servos o joystick.
+Usas otro puerto serial o sensor.
+Quieres activar o desactivar el turbo en teleop_twist_joy (enable_turbo_button: -1

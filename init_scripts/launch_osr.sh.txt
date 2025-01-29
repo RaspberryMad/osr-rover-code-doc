@@ -1,0 +1,19 @@
+📄 Archivo: launch_osr.sh
+📌 ¿Qué es?
+Es un script Bash para iniciar el rover en ROS 2.
+
+📌 ¿Para qué sirve?
+Carga variables de entorno desde osr_paths.sh.
+Detecta la versión de ROS 2 y carga su entorno.
+Configura el entorno del workspace (osr_ws).
+Ejecuta el lanzamiento de ROS 2:
+Si existe osr_mod_launch.py, lo usa.
+Si no, usa osr_launch.py.
+
+📌 ¿Hace falta tocarlo?
+❌ No, salvo que uses una versión diferente de ROS 2 o necesites modificar los archivos de lanzamiento.
+✅ Si ROS no se carga bien, podrías hardcodear la versión de ROS en:
+bash
+Copiar
+Editar
+ROS_VERSION=humble  # O la versión que uses

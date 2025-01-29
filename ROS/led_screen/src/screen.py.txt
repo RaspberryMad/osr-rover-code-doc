@@ -1,0 +1,23 @@
+📄 Archivo: screen.py
+📌 ¿Qué es?
+Es una clase en Python que maneja la comunicación con una pantalla LED conectada al rover a través de puerto serie (UART, /dev/ttyUSB0).
+
+📌 ¿Para qué sirve?
+Abre y configura el puerto serial (/dev/ttyUSB0, 9600 baudios).
+Envía datos a la pantalla sobre:
+Estado de conexión (CONNECTED/DISCONNECTED).
+Nivel de batería.
+Errores del sistema.
+Temperatura.
+Consumo de corriente (motores y dirección).
+Calcula y envía un checksum para asegurar la integridad de los datos.
+Lee respuestas de la pantalla (check_for_affirm()).
+
+📌 ¿Hace falta tocarlo?
+✅ Solo si:
+La pantalla usa otro puerto serial → Cambia dev = "/dev/ttyUSB0".
+Se modifica el formato de datos que envía el rover.
+La velocidad de comunicación cambia (actualmente 9600 baudios).
+📌 Conclusión:
+Este código traduce el estado del rover en comandos seriales que la pantalla LED puede entender y mostrar. Se usa en conjunto con arduino_comm.py dentro del nodo led_screen.
+

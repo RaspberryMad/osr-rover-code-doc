@@ -1,0 +1,19 @@
+📄 Archivo: osr_paths.sh
+📌 ¿Qué es?
+Es un script Bash que define la ruta principal del código del rover.
+
+📌 ¿Para qué sirve?
+Crea y exporta la variable de entorno OSR_CODE_DIR, apuntando al directorio del código:
+bash
+Copiar
+Editar
+export OSR_CODE_DIR=$HOME/osr_ws/src/osr-rover-code
+Otros scripts pueden usar esta variable para referirse al código sin necesidad de escribir la ruta completa.
+
+📌 ¿Hace falta tocarlo?
+❌ No, salvo que cambies la ubicación del código del rover.
+✅ Si lo mueves, actualiza la ruta:
+bash
+Copiar
+Editar
+export OSR_CODE_DIR=/nueva/ruta/del/codigo

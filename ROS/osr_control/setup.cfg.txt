@@ -1,0 +1,15 @@
+📄 Archivo: osr_control/setup.cfg
+📌 ¿Qué es?
+Es un archivo de configuración de instalación para Python, usado por setuptools en ROS 2.
+
+📌 ¿Para qué sirve?
+Define dónde se instalan los scripts del paquete osr_control.
+Durante la instalación con colcon build, los scripts se copian a:
+bash
+Copiar
+Editar
+$base/lib/osr_control
+donde $base es el directorio del workspace.
+
+📌 ¿Hace falta tocarlo?
+❌ No es necesario modificarlo, salvo que quieras cambiar la ubicación de instalación de los scripts de osr_control.

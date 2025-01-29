@@ -1,0 +1,25 @@
+📄 Archivo: 60-i2c-tools.rules
+📌 ¿Qué es?
+Este archivo es una regla de udev en Linux. Udev es el sistema de administración de dispositivos en el kernel de Linux y permite configurar permisos y accesos a dispositivos automáticamente cuando se detectan.
+
+📌 ¿Para qué sirve?
+Define permisos para dispositivos I2C (Inter-Integrated Circuit), que es un protocolo de comunicación usado para conectar sensores y actuadores al rover. En este caso:
+
+KERNEL=="i2c-0", GROUP="i2c", MODE="0660"
+Dispositivo i2c-0 solo puede ser accedido por usuarios en el grupo i2c.
+Modo 0660: Solo el dueño y el grupo i2c pueden leer y escribir en este dispositivo.
+KERNEL=="i2c-[1-9]*", GROUP="i2c", MODE="0666"
+Todos los buses I2C (i2c-1, i2c-2, etc.) pueden ser accedidos por cualquier usuario.
+Modo 0666: Cualquier usuario puede leer y escribir en estos dispositivos.
+
+📌 ¿Hace falta tocar o configurar algo?
+Si los sensores o actuadores I2C no están funcionando, podrías necesitar asegurarte de que el usuario pertenece al grupo i2c. Puedes hacerlo con:
+bash
+Copiar
+Editar
+sudo usermod -aG i2c $USER
+Luego, reiniciar el sistema para aplicar los cambios.
+Si necesitas más seguridad, puedes cambiar MODE="0666" a MODE="0660" para restringir el acceso solo al grupo i2c.
+
+📌 ¿Se debe modificar en este proyecto?
+No es necesario modificarlo, a menos que tengas problemas con la detección de dispositivos I2C o necesites restringir permisos.

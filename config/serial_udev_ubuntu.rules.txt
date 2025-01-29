@@ -1,0 +1,52 @@
+📄 Archivo: serial_udev_ubuntu.rules
+📌 ¿Qué es?
+Es un archivo de reglas udev en Linux que gestiona los permisos y nombres de los dispositivos UART/serial en la Raspberry Pi. Permite que los puertos seriales sean accesibles con nombres más amigables y con los permisos adecuados.
+
+📌 ¿Para qué sirve?
+
+Crea enlaces simbólicos (symlinks) para los puertos seriales, de manera que:
+ttyS0 se puede acceder como /dev/serial0.
+ttyAMA0 se puede acceder como /dev/serial1.
+Asigna permisos de lectura/escritura (MODE="0660") a los dispositivos para los usuarios en el grupo tty.
+📌 Explicación de las reglas:
+bash
+Copiar
+Editar
+KERNEL=="ttyS0", SYMLINK+="serial0" GROUP="tty" MODE="0660"
+Si el kernel detecta el dispositivo ttyS0, creará un enlace simbólico /dev/serial0.
+Asigna permisos solo para el dueño y el grupo tty (0660).
+bash
+Copiar
+Editar
+KERNEL=="ttyAMA0", SYMLINK+="serial1" GROUP="tty" MODE="0660"
+Si el kernel detecta ttyAMA0, creará el enlace simbólico /dev/serial1.
+También restringe el acceso al grupo tty.
+📌 ¿Hace falta tocar o configurar algo?
+✅ No es necesario modificarlo, a menos que:
+
+Tengas problemas con dispositivos seriales (UART)
+Puedes verificar qué dispositivos están disponibles con:
+bash
+Copiar
+Editar
+ls -l /dev/serial*
+Si serial0 y serial1 no aparecen, podrías necesitar reiniciar o recargar udev:
+bash
+Copiar
+Editar
+sudo udevadm control --reload-rules && sudo udevadm trigger
+Si cambias la configuración del puerto UART en config.txt de Raspberry Pi
+Si serial0 o serial1 no funcionan, revisa /boot/config.txt y verifica si está habilitado:
+bash
+Copiar
+Editar
+sudo nano /boot/config.txt
+Asegúrate de que la línea UART está habilitada:
+makefile
+Copiar
+Editar
+enable_uart=1
+
+📌 ¿Se debe modificar en este proyecto?
+🔹 No es recomendable cambiarlo a menos que uses una configuración diferente de hardware y necesites reasignar los puertos seriales.
+🔹 Si agregas más dispositivos seriales (como sensores o módulos GPS), podrías necesitar crear reglas adicionales.

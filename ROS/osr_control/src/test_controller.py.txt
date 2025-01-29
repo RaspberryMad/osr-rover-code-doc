@@ -1,0 +1,14 @@
+📄 Archivo: test_controller.py
+📌 ¿Qué es?
+Un script de prueba para enviar comandos de velocidad al controlador de motores del rover en ROS 2.
+
+📌 ¿Para qué sirve?
+
+Publica comandos de velocidad en el tópico /control/osr_controllers/drive_velocity_controller/command.
+Envía un valor de 100.0 a los 6 primeros motores por 5 segundos.
+Luego envía un comando de velocidad cero para detenerlos.
+📌 ¿Hace falta tocarlo?
+✅ Solo si:
+
+Se quiere cambiar la velocidad de prueba.
+Se usa otro tópico para controlar motores.

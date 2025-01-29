@@ -1,0 +1,13 @@
+📄 Archivo: osr_startup.service
+📌 ¿Qué es?
+Es un servicio systemd que ejecuta automáticamente el script de inicio del rover (launch_osr.sh) cuando el sistema arranca.
+
+📌 ¿Para qué sirve?
+Ejecuta launch_osr.sh en /usr/local/bin/ al iniciar el sistema.
+Corre bajo el usuario ubuntu y se reinicia si falla (Restart=always).
+Se asegura de que la red esté disponible antes de iniciar (After=network.target).
+
+📌 ¿Hace falta tocarlo?
+✅ Sí, si:
+launch_osr.sh está en otro directorio → Actualizar ExecStart= con la ruta correcta.
+Se usa otro usuario → Cambiar User= y Group=.

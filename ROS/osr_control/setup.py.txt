@@ -1,0 +1,16 @@
+📄 Archivo: osr_control/setup.py
+📌 ¿Qué es?
+Es el archivo de configuración de instalación del paquete osr_control en ROS 2, usando setuptools.
+
+📌 ¿Para qué sirve?
+
+Define el nombre, versión y dependencias del paquete.
+Especifica archivos a incluir (package.xml, launch/*.launch.py, config/*.yaml).
+Registra los nodos ejecutables (rover, roboclaw_wrapper, servo_control, etc.).
+📌 ¿Hace falta tocarlo?
+✅ Solo si:
+
+Se agregan o eliminan nodos de osr_control.
+Se cambian nombres de archivos en launch/ o config/.
+📌 Conclusión
+Este archivo permite compilar e instalar osr_control para ejecutarlo como un paquete ROS 2.

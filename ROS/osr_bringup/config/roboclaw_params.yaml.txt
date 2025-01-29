@@ -1,0 +1,22 @@
+📄 Archivo: roboclaw_params.yaml
+📌 ¿Qué es?
+Es un archivo de configuración YAML que define los parámetros de los controladores Roboclaw, usados para controlar los motores del rover.
+
+📌 ¿Para qué sirve?
+Configura la comunicación serial con los Roboclaw:
+baud_rate: 115200 → Velocidad de comunicación.
+device: "/dev/serial0" → Puerto serial usado.
+addresses: [128, 129, 130] → Direcciones de los controladores.
+Define control de movimiento:
+drive_acceleration_factor y corner_acceleration_factor: Limitan la aceleración de motores.
+velocity_timeout: Si no recibe un nuevo comando en 2.0 segundos, los motores se detienen.
+duty_mode: true: Usa comandos de duty cycle en lugar de velocidad absoluta (útil para conducción manual, pero no para navegación autónoma).
+Mapeo de motores:
+Cada motor de tracción está asignado a un Roboclaw con su dirección y canal (M1 o M2).
+Usa una relación de engranajes de 171.79:1.
+
+📌 ¿Hace falta tocarlo?
+✅ Solo si:
+Usas otro puerto serial para los controladores → Cambia device: "/dev/serial0".
+Cambia la relación de engranajes o los encoders → Modifica gear_ratio o ticks_per_rev.
+Quieres comandos de velocidad en lugar de duty cycle → Cambia duty_mode: false

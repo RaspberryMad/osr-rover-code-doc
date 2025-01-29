@@ -1,0 +1,17 @@
+📄 Archivo: osr_params.yaml
+📌 ¿Qué es?
+Es un archivo de configuración YAML que define parámetros del rover en ROS 2.
+
+📌 ¿Para qué sirve?
+Configura dimensiones físicas del rover (d1, d2, d3, d4, wheel_radius).
+Establece velocidad sin carga de los motores (drive_no_load_rpm).
+
+📌 ¿Hace falta tocarlo?
+✅ Solo si:
+Se modifican las dimensiones del rover.
+Se cambian los motores y su velocidad nominal.
+📌 Ejemplo de ajustes personalizados:
+Si las ruedas son más grandes o los motores diferentes, puedes cambiar:
+
+wheel_radius: 0.08  # [m] Nuevo tamaño de rueda
+drive_no_load_rpm: 250.0  # RPM ajustado de los motores

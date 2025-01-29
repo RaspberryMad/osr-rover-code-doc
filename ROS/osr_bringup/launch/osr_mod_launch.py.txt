@@ -1,0 +1,5 @@
+Este documento es igual al original osr_launch.py.
+Pero tal como este documento reescribe el original, se puede implementar los cambios sin tocar el original. 
+Los cambio implementados:
+Servo control: Cambia centered_pulse_widths a [152, 150, 144, 146].
+Sensor INA260: Usa sensor_address: 0x40 en vez de 0x45.
