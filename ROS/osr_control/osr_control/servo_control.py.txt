@@ -1,0 +1,33 @@
+servo_control.py solo controla la orientación de los servos (giro independiente o centrado) y publica su estado (posición, velocidad, etc.). No hace nada más. 🚀
+
+__init__()	                        Inicializa el nodo, configura el PWM del PCA9685 y crea los publishers/subscribers.
+connect_pca9685()	                Establece la conexión con el controlador PCA9685.
+corner_cmd_cb(cmd: CommandCorner)	Callback que recibe los comandos de giro de las ruedas y mueve los servos.
+publish_encoder_estimate()	        Publica el estado actual estimado de los servos en /corner_state.
+main()	                            Inicializa el nodo y lo mantiene en ejecución con rclpy.spin().
+
+🔍 1. Ver la posición actual de los servos
+Los servos publican su posición en el tópico /corner_state usando mensajes de tipo sensor_msgs/JointState.
+(linea 44 self.enc_pub = self.create_publisher(JointState, "/corner_state", 1))
+🔹 Comando para ver la posición actual de los servos
+ros2 topic echo /corner_state
+💡 Esto mostrará mensajes en vivo con la posición y velocidad estimada de cada servo.
+
+📤 2. Enviar un comando para mover los servos
+Para mover los servos, tienes que publicar un mensaje en /cmd_corner, que usa la interfaz osr_interfaces/CommandCorner.
+(linea 45 self.corner_cmd_sub = self.create_subscription(CommandCorner, "/cmd_corner", self.corner_cmd_cb, 1))
+🔹 Comando para enviar una nueva posición a los servos
+ros2 topic pub /cmd_corner osr_interfaces/msg/CommandCorner "{left_front_pos: 0.5, left_back_pos: -0.5, right_front_pos: 0.5, right_back_pos: -0.5}"
+📌 Esto enviará un mensaje que hará que:
+Las ruedas izquierdas giren hacia la derecha (posición positiva).
+Las ruedas derechas giren hacia la izquierda (posición negativa).
+Puedes ajustar los valores para probar diferentes ángulos.
+
+🔧 Servicios Disponibles
+El nodo también tiene algunos servicios relacionados con parámetros, que permiten consultar o modificar configuraciones del nodo:
+/servo_wrapper/get_parameters → Consulta parámetros actuales.
+/servo_wrapper/set_parameters → Modifica parámetros en tiempo real.
+/servo_wrapper/list_parameters → Lista los parámetros disponibles.
+💡 Ejemplo para ver los parámetros actuales del nodo servo_wrapper:
+ros2 service call /servo_wrapper/get_parameters rcl_interfaces/srv/GetParameters "{names: ['centered_pulse_widths']}"
+Esto consultará el valor del parámetro centered_pulse_widths, que es el ajuste de calibración de los servos.

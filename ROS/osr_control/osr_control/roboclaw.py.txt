@@ -1,0 +1,4 @@
+roboclaw.py es un puente esencial que permite a rover.py comunicarse con los controladores Roboclaw para manejar las ruedas.
+rover.py utiliza roboclaw.py para implementar las acciones de movimiento del rover (como avanzar, retroceder y girar).
+servo_control.py no usa roboclaw.py, ya que trabaja exclusivamente con los servos para ajustar la dirección del rover.
+Juntos, estos archivos permiten un control completo del rover: tanto del movimiento (ruedas) como de la dirección (servos).

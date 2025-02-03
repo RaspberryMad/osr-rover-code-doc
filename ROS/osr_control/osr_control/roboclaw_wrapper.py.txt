@@ -1,0 +1,63 @@
+roboclaw_wrapper.py 🚗⚡
+Controla los motores de tracción del rover a través de los controladores Roboclaw.
+
+📌 Funciones principales:
+✅ Recibe comandos de velocidad en /cmd_drive y los envía a los motores.
+✅ Publica el estado de los motores en /drive_state (posición, velocidad, corriente).
+✅ Monitorea la batería, temperatura y errores en /status.
+✅ Soporta servicios para configurar parámetros en tiempo real.
+❌ No controla los servos, solo las ruedas de tracción.
+
+📜 Descripción de Métodos
+Método	Descripción
+__init__()	                        Inicializa el nodo, configura la conexión con Roboclaw y crea publishers/subscribers.
+parameters_callback(params)	        Callback para actualizar parámetros en tiempo real cuando cambian.
+fast_update()	                    Se ejecuta cada 0.125s. Lee datos de los encoders y publica el estado de los motores.
+slow_update()	                    Se ejecuta cada 3s. Publica estado de batería, temperatura y errores.
+establish_roboclaw_connections()	Establece la conexión con los controladores Roboclaw a través del puerto serie.
+setup_encoders()	                Configura los encoders de los motores para medir posición y velocidad.
+read_encoder_values()	            Lee valores de posición y velocidad de los motores desde los encoders.
+drive_cmd_cb(cmd: CommandDrive)	    Callback que recibe comandos de velocidad en /cmd_drive y los almacena en un buffer.
+send_drive_buffer_velocity(cmd)	    Envía los comandos de velocidad almacenados al controlador Roboclaw.
+read_battery()	                    Consulta el voltaje de la batería y lo publica en /status.
+read_temperatures()	                Lee la temperatura de los controladores Roboclaw.
+read_currents()	                    Lee el consumo de corriente de cada motor.
+read_errors()	                    Lee errores de los controladores Roboclaw y los publica en /status.
+stop_motors()	                    Envía un comando para detener todos los motores de tracción.
+main()	                            Inicializa el nodo y lo mantiene en ejecución con rclpy.spin().
+
+🔍 1. Ver el estado actual de los motores
+Los motores publican su posición, velocidad y corriente en /drive_state usando sensor_msgs/JointState.
+
+📤 Comando para ver el estado actual de los motores
+ros2 topic echo /drive_state
+💡 Esto mostrará mensajes en vivo con la posición y velocidad de cada motor.
+
+📤 2. Enviar un comando para mover el rover
+Para mover el rover, publica un mensaje en /cmd_drive, que usa la interfaz osr_interfaces/msg/CommandDrive.
+📌 Ejemplo para avanzar hacia adelante
+ros2 topic pub /cmd_drive osr_interfaces/msg/CommandDrive "{left_front_vel: 1.0, left_back_vel: 1.0, left_middle_vel: 1.0, right_front_vel: -1.0, right_back_vel: -1.0, right_middle_vel: -1.0}"
+
+⚡ 3. Ver estado de la batería y errores
+El nodo roboclaw_wrapper publica la información en /status con el mensaje osr_interfaces/msg/Status.
+📌 Ver estado de la batería y errores
+ros2 topic echo /status
+💡 Esto mostrará el voltaje de la batería, la temperatura, el consumo de corriente y errores.
+
+🔧 4. Servicios Disponibles
+El nodo roboclaw_wrapper tiene varios servicios para consultar o modificar configuraciones:
+Servicio	Descripción
+/roboclaw_wrapper/get_parameters	Consulta parámetros actuales.
+/roboclaw_wrapper/set_parameters	Modifica parámetros en tiempo real.
+/roboclaw_wrapper/list_parameters	Lista los parámetros disponibles.
+📌 Ejemplo para ver los parámetros actuales del nodo roboclaw_wrapper:
+ros2 service call /roboclaw_wrapper/get_parameters rcl_interfaces/srv/GetParameters "{names: ['baud_rate']}"
+📌 Ejemplo para modificar un parámetro en tiempo real:
+ros2 service call /roboclaw_wrapper/set_parameters rcl_interfaces/srv/SetParameters "{parameters: [{name: 'drive_acceleration_factor', value: {type: 2, double_value: 0.8}}]}"
+💡 Esto cambiará la aceleración de los motores al 80% de la configuración original.
+
+🚀 Conclusión
+✅ Para mover el rover, publica en /cmd_drive con las velocidades deseadas.
+✅ Para ver el estado actual de los motores, usa /drive_state.
+✅ Para monitorear batería y errores, usa /status.
+✅ Para modificar parámetros en tiempo real, usa los servicios del nodo.

@@ -1,0 +1,84 @@
+rover.py 🚀🤖
+Coordina el movimiento general del rover.
+📌 Funciones principales:
+✅ Recibe comandos de velocidad en /cmd_vel y /cmd_vel_intuitive para mover el rover.
+✅ Publica comandos a los motores de tracción y dirección en /cmd_drive y /cmd_corner.
+✅ Calcula la cinemática y publica la odometría en /odom.
+✅ Publica el radio de giro en /turning_radius.
+✅ Escucha el estado de los motores en /drive_state y /corner_state.
+❌ No controla directamente los motores ni los servos, solo los coordina.
+
+📜 Descripción de Métodos
+Método	                                                Descripción
+__init__()	                                            Inicializa el nodo, configura los parámetros del rover y crea publishers/subscribers.
+cmd_cb(twist_msg, intuitive)	                        Callback que recibe comandos de velocidad en /cmd_vel y calcula los comandos para las ruedas.
+enc_cb(msg)	                                            Callback que recibe actualizaciones del estado de los motores y calcula la cinemática inversa.
+calculate_drive_velocities(speed, radius)	            Calcula las velocidades de cada rueda en función de la velocidad deseada y el radio de giro.
+calculate_corner_positions(radius)	                    Calcula los ángulos de las ruedas para girar con un radio específico.
+calculate_rotate_in_place_cmd(twist)	                Calcula los comandos para girar en el sitio (sin desplazamiento).
+twist_to_turning_radius(twist, clip, intuitive_mode)	Convierte un comando de velocidad (Twist) en un radio de giro realista.
+forward_kinematics()	                                Calcula la velocidad actual del rover a partir de los encoders de los motores.
+main()	                                                Inicializa el nodo y lo mantiene en ejecución con rclpy.spin().
+
+🔍 1. Ver el estado actual del rover
+El rover publica su odometría en /odom y su radio de giro en /turning_radius.
+📤 Comando para ver la odometría en vivo
+ros2 topic echo /odom
+📤 Comando para ver el radio de giro
+ros2 topic echo /turning_radius - NO SE COMO VA
+💡 La odometría es útil para saber la posición y orientación del rover en el espacio.
+Lo que hace este código:
+Recibe datos de los encoders (posiciones y velocidades de las ruedas) de los tópicos /drive_state y /corner_state.
+Calcula la odometría:
+La posición global (x, y) del rover.
+La orientación global (theta) del rover.
+Velocidades lineal y angular.
+Publica los resultados:
+En el tópico /odom como un mensaje nav_msgs/Odometry.
+En el sistema de transformaciones tf (odom -> base_link).
+Permite que otros nodos, como SLAM o navegación, utilicen esta información para:
+Localizar al rover en un mapa.
+Planificar rutas basadas en la posición actual.
+
+📤 2. Mover el rover con comandos de velocidad
+El nodo rover traduce comandos de velocidad en /cmd_vel en comandos para las ruedas.
+📌 Ejemplo para avanzar en línea recta
+ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.5, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}"
+📌 Ejemplo para girar a la izquierda
+ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.3, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.5}}"
+📌 Ejemplo para girar en el sitio
+ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 1.0, z: 0.0}}"  - NO VA
+💡 La diferencia entre angular.y y angular.z:
+
+angular.y → gira en el sitio.
+angular.z → curva mientras se mueve.
+🎮 3. Control intuitivo con joystick
+Si controlas el rover manualmente, usa /cmd_vel_intuitive, que ajusta la dirección de las ruedas automáticamente.
+📌 Ejemplo para controlar el rover con comandos intuitivos
+ros2 topic pub /cmd_vel_intuitive geometry_msgs/msg/Twist "{linear: {x: 0.5, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: -0.5}}"
+💡 Este modo hace que el rover se comporte de forma más natural con un joystick.
+
+📡 4. Ver el estado de los motores y ruedas
+El rover escucha el estado de los motores y las ruedas en /drive_state y /corner_state.
+📌 Ver estado de las ruedas motrices
+ros2 topic echo /drive_state
+📌 Ver estado de las ruedas de dirección
+ros2 topic echo /corner_state
+💡 Útil para diagnosticar problemas de alineación o control.
+
+🔧 5. Servicios Disponibles
+El nodo rover tiene varios servicios para consultar o modificar configuraciones:
+Servicio	            Descripción
+/rover/get_parameters	Consulta parámetros actuales.
+/rover/set_parameters	Modifica parámetros en tiempo real.
+/rover/list_parameters	Lista los parámetros disponibles.
+📌 Ejemplo para ver los parámetros actuales del nodo rover:
+ros2 service call /rover/get_parameters rcl_interfaces/srv/GetParameters "{names: ['enable_odometry']}"
+📌 Ejemplo para habilitar la odometría en tiempo real:
+ros2 service call /rover/set_parameters rcl_interfaces/srv/SetParameters "{parameters: [{name: 'enable_odometry', value: {type: 1, bool_value: true}}]}"
+💡 Si activas la odometría, el rover publicará su posición en /odom.
+
+🚀 Conclusión
+✅ Para mover el rover, publica en /cmd_vel o /cmd_vel_intuitive.
+✅ Para ver su estado actual, usa /odom, /drive_state y /corner_state.
+✅ Para ajustar la configuración, usa los servicios del nodo.

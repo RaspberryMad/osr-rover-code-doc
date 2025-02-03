@@ -1,0 +1,57 @@
+INA260Node 🚀🔋
+Nodo ROS 2 para monitorear y publicar el estado de la batería utilizando el sensor INA260.
+
+📌 Funciones principales:
+✅ Lee datos del sensor INA260 (voltaje, corriente).
+✅ Publica el estado de la batería en el tópico /battery_state.
+✅ Permite ajustar dinámicamente la frecuencia de publicación mediante parámetros.
+
+📜 Descripción de Métodos
+Método	                            Descripción
+__init__()	                        Inicializa el nodo, configura parámetros y crea un publisher para /battery_state.
+parameter_callback(parameters)	    Callback para actualizar parámetros dinámicamente, como el publish_rate.
+publish_data()	                    Lee datos del INA260 (voltaje y corriente) y los publica en /battery_state como un mensaje BatteryState.
+
+🔍 Tópicos publicadores
+/battery_state: Publica un mensaje sensor_msgs/BatteryState con la información de:
+Voltaje (voltage).
+Corriente (current).
+Tecnología de la batería (power_supply_technology - definido como LiPo).
+🛠 Configuración dinámica
+Parámetros ajustables:
+sensor_address: Dirección del sensor INA260 en el bus I2C (por defecto, 0x40).
+publish_rate: Frecuencia de publicación en Hz (por defecto, 2.0 Hz).
+Actualizar frecuencia de publicación: Puedes ajustar el parámetro publish_rate en tiempo de ejecución, y el nodo actualizará automáticamente su temporizador:
+ros2 param set /ina260_node publish_rate 5.0
+📤 Ejemplo para ver el estado de la batería
+Comando para escuchar el tópico /battery_state:
+ros2 topic echo /battery_state
+Lo que hace este código:
+Inicialización:
+
+Configura el sensor INA260 usando la dirección I2C definida en el parámetro sensor_address.
+Establece la frecuencia de publicación (publish_rate).
+Lectura de datos:
+
+Obtiene los valores de voltaje y corriente del sensor INA260.
+Publicación:
+
+Publica esta información en el tópico /battery_state como mensajes sensor_msgs/BatteryState.
+Reconfiguración dinámica:
+
+Permite cambiar la frecuencia de publicación (publish_rate) en tiempo de ejecución sin reiniciar el nodo.
+🔧 Servicios y parámetros disponibles
+Servicio o Parámetro	Descripción
+/ina260_node/get_parameters	Consulta los parámetros actuales del nodo (ejemplo: sensor_address, publish_rate).
+/ina260_node/set_parameters	Modifica los parámetros dinámicamente (ejemplo: actualizar la frecuencia de publicación).
+/ina260_node/list_parameters	Lista los parámetros disponibles para este nodo.
+Ejemplo de uso
+Ver los parámetros actuales del nodo:
+ros2 service call /ina260_node/get_parameters rcl_interfaces/srv/GetParameters "{names: ['sensor_address', 'publish_rate']}"
+Cambiar la frecuencia de publicación:
+ros2 service call /ina260_node/set_parameters rcl_interfaces/srv/SetParameters "{parameters: [{name: 'publish_rate', value: {type: 2, double_value: 5.0}}]}"
+🚀 Conclusión
+✅ Este código es un nodo dedicado al monitoreo de la batería del rover.
+✅ Proporciona lecturas en tiempo real del voltaje y la corriente.
+✅ Permite ajustar dinámicamente la frecuencia de publicación según las necesidades.
+✅ Es útil para monitorear el consumo energético del rover y puede integrarse con otros nodos, como los de navegación o diagnóstico.
